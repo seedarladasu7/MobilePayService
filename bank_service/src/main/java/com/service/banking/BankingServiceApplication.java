@@ -1,4 +1,4 @@
-package com.service.mobile;
+package com.service.banking;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +7,7 @@ import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 
-import com.service.mobile.config.BankingServiceRibbonConfiguration;
+import com.service.banking.config.MobileBankingRibbonConfiguration;
 
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -18,17 +18,17 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableFeignClients
 @EnableEurekaClient
 @EnableSwagger2
-@RibbonClient(name = "bankingserviceclient", configuration = BankingServiceRibbonConfiguration.class)
-public class MobileServiceApplication {
+@RibbonClient(name = "mobilebankingclient", configuration = MobileBankingRibbonConfiguration.class)
+public class BankingServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MobileServiceApplication.class, args);
+		SpringApplication.run(BankingServiceApplication.class, args);
 	}
 	
 	@Bean
 	public Docket productApi() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.service.mobile")).build();
+				.apis(RequestHandlerSelectors.basePackage("com.service.banking")).build();
 	}
 
 }

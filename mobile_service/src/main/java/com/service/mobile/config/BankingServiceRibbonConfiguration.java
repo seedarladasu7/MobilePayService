@@ -1,4 +1,4 @@
-package com.service.banking.config;
+package com.service.mobile.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,7 @@ import com.netflix.loadbalancer.IPing;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.PingUrl;
 
-public class MobilepayRibbonConfiguration {
+public class BankingServiceRibbonConfiguration {
 
 	@Autowired
 	IClientConfig config;
