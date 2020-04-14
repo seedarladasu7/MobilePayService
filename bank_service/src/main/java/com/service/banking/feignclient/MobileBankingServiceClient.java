@@ -2,7 +2,7 @@ package com.service.banking.feignclient;
 
 import org.springframework.cloud.openfeign.FeignClient;
 
-@FeignClient(name = "http://mobile-service/MobileBankingServices/orders")
+@FeignClient(name = "http://mobile-service/MobileBankingService/orders")
 public interface MobileBankingServiceClient {
 	
 	/*@GetMapping("")

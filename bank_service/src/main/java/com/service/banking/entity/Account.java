@@ -39,15 +39,15 @@ public class Account {
 	@Column(name = "acc_opening_on")
 	private Timestamp accOpeningOn;
 	
-	@Column(name = "acc_balance")
-	private float accBalance;
+	@Column(name = "balance")
+	private float balance;
 	
 	@Column(name = "status")
 	private String status;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "cust_id")
 	@JsonBackReference
-	private User user;
+	private Customer customer;
 	
 }

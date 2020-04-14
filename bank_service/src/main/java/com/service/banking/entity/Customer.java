@@ -11,23 +11,25 @@ import lombok.Data;
 import lombok.ToString;
 
 @Entity
-@Table(name = "user")
+@Table(name = "customer")
 @Data
 @ToString
-public class User {
+public class Customer {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
-	private Integer userId;
-	
-	@Column(name = "user_name")
-    private String userName;
-	
-	@Column
-    private String gender;
-	
-	@Column
-    private Integer age;
-    
+	@Column(name = "cust_id")
+	private Integer custId;
+
+	@Column(name = "cust_name")
+	private String custName;
+
+	@Column(name = "gender")
+	private String gender;
+
+	@Column(name = "age")
+	private Integer age;
+
+	@Column(name = "location")
+	private String location;
 }
