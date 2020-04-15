@@ -1,6 +1,7 @@
 package com.service.mobile.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,7 @@ public class MobileServiceController {
 		return bankServiceClient.transferFunds(ftDTO);
 	}
 
-	@GetMapping("/{custId}/statement")
+	@GetMapping("/{custId}/{txnMode}/statement")
 	public ResponseEntity<List<List<TransactionDetails>>> getStatement(@PathVariable("custId") Integer custId,
 			@PathVariable("txnMode") String txnMode) {
 		return bankServiceClient.getStatement(custId, txnMode);

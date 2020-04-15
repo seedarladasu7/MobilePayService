@@ -1,6 +1,7 @@
 package com.service.banking.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -63,9 +64,8 @@ public class BankingServiceController {
 	@PostMapping("/fundTransfer")
 	public ResponseEntity<String> transferFunds(@RequestBody FundTransferDTO ftDTO) {
 		return new ResponseEntity<>(bankingService.transferFunds(ftDTO), HttpStatus.OK);		
-	}
-	
-	@GetMapping("/{custId}/statement")
+	}	
+	@GetMapping("/{custId}/{txnMode}/statement")
 	public ResponseEntity<List<List<TransactionDetails>>> getStatement(@PathVariable("custId") Integer custId, @PathVariable("txnMode") String txnMode) {
 		return new ResponseEntity<>(bankingService.retrieveCustomerBankStatement(custId, txnMode), HttpStatus.ACCEPTED);		
 	}

@@ -188,11 +188,11 @@ public class BankingServiceImpl implements BankingService {
 				List<List<TransactionDetails>> lists = new ArrayList<>();
 				acctList.forEach(account -> {
 					Optional<List<Transaction>> txnListOptnl = null;
-
-					if (StringUtils.isEmpty(txnMode)) {
-						txnListOptnl = txnRepository.findByAccount(account);
-					} else {
+					
+					if(StringUtils.isNotEmpty(txnMode) && StringUtils.isNotEmpty(txnMode.trim())) {
 						txnListOptnl = txnRepository.findByAccountAndTxnMode(account, txnMode);
+					} else {
+						txnListOptnl = txnRepository.findByAccount(account);
 					}
 
 					if (txnListOptnl.isPresent()) {
