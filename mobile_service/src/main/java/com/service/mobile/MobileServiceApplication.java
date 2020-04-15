@@ -24,7 +24,7 @@ public class MobileServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MobileServiceApplication.class, args);
 	}
-	
+
 	@Bean
 	public Docket productApi() {
 		return new Docket(DocumentationType.SWAGGER_2).select()

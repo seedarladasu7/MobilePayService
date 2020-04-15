@@ -12,5 +12,5 @@ public class FundTransferDTO {
 	private String fromAccount;
 	private String toAccount;
 	private float txnAmount;
-	
+	private String txnMode;
 }

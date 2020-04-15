@@ -1,11 +1,11 @@
 package com.service.banking.service;
 
-import com.service.banking.dto.CustomerDTO;
-
 import java.util.List;
 
 import com.service.banking.dto.AccountDTO;
+import com.service.banking.dto.CustomerDTO;
 import com.service.banking.dto.FundTransferDTO;
+import com.service.banking.dto.TransactionDetails;
 
 public interface BankingService {
 
@@ -20,5 +20,7 @@ public interface BankingService {
 	public AccountDTO findAccountById(int acctId);
 	
 	public List<AccountDTO> findAccountByMobileNumber(String mobileNum);
+	
+	public List<List<TransactionDetails>> retrieveCustomerBankStatement(int custId, String txnMode);
 
 }

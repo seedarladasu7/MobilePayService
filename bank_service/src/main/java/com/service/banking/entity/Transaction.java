@@ -40,11 +40,14 @@ public class Transaction {
 	@Column(name = "txn_amount")
 	private float txnAmount;
 	
+	@Column(name = "txn_date")
+	private Timestamp txnDate;
+	
 	@Column(name = "txn_type")
 	private String txnType;
 	
-	@Column(name = "txn_date")
-	private Timestamp txnDate;
+	@Column(name = "txn_mode")
+	private String txnMode;
 
 	@ManyToOne
 	@JoinColumn(name = "acc_id")

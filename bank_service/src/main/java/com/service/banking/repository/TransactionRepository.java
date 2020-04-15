@@ -13,5 +13,7 @@ import com.service.banking.entity.Transaction;
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 	
 	Optional<List<Transaction>> findByAccount(Account account);
+	
+	Optional<List<Transaction>> findByAccountAndTxnMode(Account account, String txnMode);
 
 }

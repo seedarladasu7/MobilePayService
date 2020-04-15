@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.banking.dto.AccountDTO;
 import com.service.banking.dto.CustomerDTO;
 import com.service.banking.dto.FundTransferDTO;
+import com.service.banking.dto.TransactionDetails;
 import com.service.banking.entity.Account;
 import com.service.banking.entity.Customer;
 import com.service.banking.entity.Transaction;
@@ -30,7 +31,7 @@ public class BankingServiceImpl implements BankingService {
 	SimpleDateFormat simpDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	private static ObjectMapper objectMapper = new ObjectMapper();
-	
+
 	@Autowired
 	CustomerRepository custRepository;
 
@@ -77,7 +78,7 @@ public class BankingServiceImpl implements BankingService {
 	public AccountDTO findAccountById(int acctId) {
 		Optional<Account> acctOptnl = accRepository.findById(acctId);
 		if (acctOptnl.isPresent()) {
-			Account acct = acctOptnl.get();			
+			Account acct = acctOptnl.get();
 			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 			return objectMapper.convertValue(acct, AccountDTO.class);
 		}
@@ -102,7 +103,8 @@ public class BankingServiceImpl implements BankingService {
 			List<Account> acctList = acctsListOptnl.get();
 			if (!acctList.isEmpty()) {
 				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-				return acctList.stream().map(acct -> objectMapper.convertValue(acct, AccountDTO.class)).collect(Collectors.toList());
+				return acctList.stream().map(acct -> objectMapper.convertValue(acct, AccountDTO.class))
+						.collect(Collectors.toList());
 			}
 		}
 		return new ArrayList<>();
@@ -121,6 +123,10 @@ public class BankingServiceImpl implements BankingService {
 
 		if (fromAcc == null || toAcc == null) {
 			message += "Invalid Bank details provided...";
+		}
+
+		if (StringUtils.isEmpty(ftDTO.getTxnMode())) {
+			ftDTO.setTxnMode("web");
 		}
 
 		if (StringUtils.isNotEmpty(message)) {
@@ -142,6 +148,7 @@ public class BankingServiceImpl implements BankingService {
 					dtTxn.setFromAccount(ftDTO.getFromAccount());
 					dtTxn.setToAccount(ftDTO.getToAccount());
 					dtTxn.setTxnAmount(txnAmount);
+					dtTxn.setTxnMode(ftDTO.getTxnMode());
 					txnRepository.save(dtTxn);
 				}
 			}
@@ -157,11 +164,54 @@ public class BankingServiceImpl implements BankingService {
 				crTxn.setFromAccount(ftDTO.getFromAccount());
 				crTxn.setToAccount(ftDTO.getToAccount());
 				crTxn.setTxnAmount(txnAmount);
+				crTxn.setTxnMode(ftDTO.getTxnMode());
 				txnRepository.save(crTxn);
 			}
 			message += "Transaction has been done successfully...";
 		}
 		return message;
+	}
+
+	@Override
+	public List<List<TransactionDetails>> retrieveCustomerBankStatement(int custId, String txnMode) {
+
+		String message = "";
+
+		Optional<Customer> custOptnl = custRepository.findById(custId);
+
+		if (custOptnl.isPresent()) {
+			Customer customer = custOptnl.get();
+			Optional<List<Account>> accOptnl = accRepository.findByCustomer(customer);
+
+			if (accOptnl.isPresent()) {
+				List<Account> acctList = accOptnl.get();
+				List<List<TransactionDetails>> lists = new ArrayList<>();
+				acctList.forEach(account -> {
+					Optional<List<Transaction>> txnListOptnl = null;
+
+					if (StringUtils.isEmpty(txnMode)) {
+						txnListOptnl = txnRepository.findByAccount(account);
+					} else {
+						txnListOptnl = txnRepository.findByAccountAndTxnMode(account, txnMode);
+					}
+
+					if (txnListOptnl.isPresent()) {
+						List<Transaction> txnList = txnListOptnl.get();
+						objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+						lists.add(txnList.stream().map(txn -> objectMapper.convertValue(txn, TransactionDetails.class))
+								.collect(Collectors.toList()));
+					}
+				});
+				return lists;
+			} else {
+				message += "Invalid Account for customer: " + customer.getCustName();
+			}
+
+		} else {
+			message += "Invalid customer with customer id: " + custId;
+		}
+
+		return new ArrayList<>();
 	}
 
 }
